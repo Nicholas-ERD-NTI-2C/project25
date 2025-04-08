@@ -1,0 +1,17 @@
+// @@profiles
+h2 User Profiles
+form action="/profiles" method="get"
+  div
+    label for="query" Search Profiles:
+    input type="text" id="query" name="query" value="#{query || ''}"
+    button type="submit" Search
+ul
+  - if users.empty?
+    li No profiles found.
+  - else
+    - users.each do |user|
+      li
+        a href="/profiles/#{user['id']}"= user['username']
+        - if session[:user_id]==7 
+          form action="/delete_user/#{user['id']}/delete" method="post" style="display:inline" onsubmit="return confirm('Delete this user?');"
+            button type="submit" Delete

@@ -1,0 +1,20 @@
+// @@new
+h2 Add a New Album
+form action="/albums" method="post"
+  div
+    label for="title" Title:
+    input type="text" id="title" name="title" required
+  div
+    label for="artist" Artist:
+    input type="text" id="artist" name="artist" required
+  div
+    label for="year" Year:
+    input type="number" id="year" name="year" required
+  div
+    label for="rating" Rating (0.5 - 5 stars):
+    input type="number" id="rating" name="rating" step="0.5" min="0.5" max="5" required
+  div
+    label for="listened_date" Date Listened:
+    input type="date" id="listened_date" name="listened_date" required
+  div
+    button type="submit" Add Album

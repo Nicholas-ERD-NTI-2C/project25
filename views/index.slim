@@ -1,0 +1,10 @@
+// @@index
+h2 Albums You've Listened To
+ul
+  - if albums.empty?
+    li No albums logged yet. Start by adding one!
+  - else
+    - albums.each do |album|
+      li
+        | "#{album['title']}" by #{album['artist']} (#{album['year']}) - Rated: #{album['rating']} stars, Listened on: #{album['listened_date']}
+        a href="/albums/#{album['id']}/edit" Edit

@@ -1,0 +1,56 @@
+// @@profile
+hr
+h1 Profile of #{user['username']}
+
+// h1 = user['username']
+// p Followers: #{followers_count}
+// p Following: #{following_count}
+a href="/followers/#{user['id']}" Followers: #{followers_count}
+br
+a href="/following/#{user['id']}" Following: #{following_count}
+
+
+- if logged_in? && user['id'] != current_user['id']
+  - if is_following
+    form action="/unfollow/#{user['id']}" method="post"
+      button Unfollow
+  - else
+    form action="/follow/#{user['id']}" method="post"
+      button Follow
+
+//a href="/followers/#{user['id']}" View Followers
+//a href="/following/#{user['id']}" View Following
+
+
+h3 Albums Logged
+
+/*ul
+  - if albums.empty?
+    li No albums logged yet.
+  - else
+    - albums.each do |album|
+      li
+        | "#{album['title']}" by #{album['artist']} (#{album['year']}) - Rated: #{album['rating']} stars, Listened on: #{album['listened_date']} */
+
+
+ul
+  - if albums.empty?
+    li No albums logged yet.
+  - else
+    - albums.each do |album|
+      li
+        | "#{album['title']}" by #{album['artist']} (#{album['year']}) - Rated: #{album['rating']} stars, Listened on: #{album['listened_date']} |
+        - if logged_in? && current_user['id'] == album['user_id']
+          form action="/albums/#{album['id']}/edit" method="get" style="display:inline"
+            button type="submit" Edit
+          form action="/albums/#{album['id']}/delete" method="post" style="display:inline" onsubmit="return confirm('Delete this album?');"
+            button type="submit" Delete
+
+
+
+          
+
+
+
+
+

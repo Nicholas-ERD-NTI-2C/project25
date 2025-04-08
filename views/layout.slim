@@ -1,0 +1,29 @@
+// @@layout
+
+<!DOCTYPE html>
+html lang="en"
+  head
+    meta charset="UTF-8"/
+    meta name="viewport" content="width=device-width, initial-scale=1.0"/
+    link rel="stylesheet" href="/css/style.css"/
+    title Album Logger
+  body 
+    header
+      h3 Album Logger
+      nav
+        ul
+          - if logged_in?
+            li
+              a href="/" Home
+            li
+              a href="/new" Add Album
+            li
+              a href="/profiles" Profiles
+            li
+              a href="/logout" Logout
+          - else
+            li
+              a href="/login" Login
+            li
+              a href="/signup" Signup
+    == yield

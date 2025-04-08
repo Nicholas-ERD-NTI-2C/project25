@@ -1,0 +1,13 @@
+// @@signup
+h2 Signup
+- if locals[:error]
+  p.error= error
+form action="/signup" method="post"
+  div
+    label for="username" Username:
+    input type="text" id="username" name="username" required
+  div
+    label for="password" Password:
+    input type="password" id="password" name="password" required
+  div
+    button type="submit" Signup

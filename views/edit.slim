@@ -1,0 +1,20 @@
+// @@edit
+h2 Edit Album
+form action="/albums/#{album['id']}" method="post"
+  div
+    label for="title" Title:
+    input type="text" id="title" name="title" value="#{album['title']}" required
+  div
+    label for="artist" Artist:
+    input type="text" id="artist" name="artist" value="#{album['artist']}" required
+  div
+    label for="year" Year:
+    input type="number" id="year" name="year" value="#{album['year']}" required
+  div
+    label for="rating" Rating (0.5 - 5 stars):
+    input type="number" id="rating" name="rating" step="0.5" min="0.5" max="5" value="#{album['rating']}" required
+  div
+    label for="listened_date" Date Listened:
+    input type="date" id="listened_date" name="listened_date" value="#{album['listened_date']}" required
+  div
+    button type="submit" Update Album
