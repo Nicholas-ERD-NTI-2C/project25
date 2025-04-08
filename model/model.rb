@@ -2,10 +2,11 @@ require 'sqlite3'
 
 def database_setup()
   # Database setup
-  db = SQLite3::Database.new 'albums.db'
-  db.results_as_hash = true
-  return db
+  DB = SQLite3::Database.new 'db/albums.db'
+  DB.results_as_hash = true
+  return DB
 end
+
 
 
 
