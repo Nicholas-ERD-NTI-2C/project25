@@ -48,6 +48,12 @@ enable :sessions
 
 # Helper methods
 helpers do
+
+  def user_exists?(id)
+    result = DB.execute("SELECT 1 FROM users WHERE id = ? LIMIT 1", id).first
+    !result.nil?
+  end
+
   def current_user
     if session[:user_id]
       @current_user ||= DB.execute("SELECT * FROM users WHERE id = ?", session[:user_id]).first
@@ -143,7 +149,7 @@ get '/followers/:id' do
   user_id = params[:id].to_i
   user = DB.execute("SELECT * FROM users WHERE id = ?", user_id).first
   followers = DB.execute("SELECT users.* FROM followers JOIN users ON followers.follower_id = users.id WHERE followers.followed_id = ?", user_id)
-  slim :followers, locals: { followers: followers, user: user}
+  slim :"follow/followers", locals: { followers: followers, user: user}
 end
 
 # Show who a user is following
@@ -151,18 +157,33 @@ get '/following/:id' do
   user_id = params[:id].to_i
   user = DB.execute("SELECT * FROM users WHERE id = ?", user_id).first
   following = DB.execute("SELECT users.* FROM followers JOIN users ON followers.followed_id = users.id WHERE followers.follower_id = ?", user_id)
-  slim :following, locals: { following: following, user: user}
+  slim :"follow/following", locals: { following: following, user: user}
 end
 
 # Profile page
 get '/profiles/:id' do
   user_id = params[:id].to_i
   user = DB.execute("SELECT * FROM users WHERE id = ?", user_id).first
-  followers_count = DB.execute("SELECT COUNT(*) AS count FROM followers WHERE followed_id = ?", user_id).first['count']
-  following_count = DB.execute("SELECT COUNT(*) AS count FROM followers WHERE follower_id = ?", user_id).first['count']
+
+  followers_count = DB.execute(<<-SQL, user_id).first['count']
+    SELECT COUNT(*) AS count
+    FROM followers
+    JOIN users ON followers.follower_id = users.id
+    WHERE followers.followed_id = ?
+  SQL
+
+  following_count = DB.execute(<<-SQL, user_id).first['count']
+    SELECT COUNT(*) AS count
+    FROM followers
+    JOIN users ON followers.followed_id = users.id
+    WHERE followers.follower_id = ?
+  SQL
+
+  # followers_count = DB.execute("SELECT COUNT(*) AS count FROM followers WHERE followed_id = ?", user_id).first['count']
+  # following_count = DB.execute("SELECT COUNT(*) AS count FROM followers WHERE follower_id = ?", user_id).first['count']
   is_following = logged_in? && is_following?(current_user['id'], user_id)
   albums = DB.execute("SELECT * FROM albums WHERE user_id = ? ORDER BY id DESC", user_id)
-  slim :profile, locals: { user: user, albums: albums, followers_count: followers_count, following_count: following_count, is_following: is_following }
+  slim :"profile/profile", locals: { user: user, albums: albums, followers_count: followers_count, following_count: following_count, is_following: is_following }
 end
 
 get '/login' do
@@ -207,5 +228,5 @@ get '/profiles' do
   else
     users = DB.execute("SELECT id, username FROM users")
   end
-  slim :profiles, locals: { users: users, query: query }
+  slim :"profile/profiles", locals: { users: users, query: query }
 end

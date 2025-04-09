@@ -1,0 +1,15 @@
+h1 Users #{user['username']} follows
+
+ul
+  - if following.empty?
+    li Not following anyone yet.
+  - else
+    - following.each do |user|
+      li
+        a href="/profiles/#{user['id']}" = user['username']
+      - username = user['username']
+      script
+        | console.log("Username: #{username}");
+
+
+    
